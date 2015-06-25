@@ -1,28 +1,42 @@
-;(function (){
+;(function() {
 
-  'use strict';
+        'use strict';
 
-  angular.module('Vehicles')
+        angular.module('Vehicles')
 
-  .controller('Vehicle', ['$scope', function ($scope) {
+        .controller('Vehicle', ['$scope', '$http', 'PARSE', '$location',
 
-    // List of Vehicle
-    $scope.vehicleList = [];
+                function($scope, $http, PARSE, $location) {
 
-    // Vehicle Constructor
-    var Vehicle = function (options) {
-      this.make = options.make;
-      this.model = options.model;
-      this.year = options.year;
-    };
+                    $scope.title2 = 'About Vehicle Tracker';
 
-    // Add Vehicle Method
-    $scope.addVehicle = function (x) {
-      var y = new Vehicle(x);
-      $scope.vehicleList.push(y);
-      $scope.car = {};
-    };
+                    // Vehicle Constructor
+                    var Vehicle = function(options) {
+                        this.make = options.make;
+                        this.model = options.model;
+                        this.year = options.year;
+                    };
 
-  }])
+
+      // Add Vehicle Method
+      $scope.addVehicle = function (x) {
+        var y = new Vehicle(x);
+
+        $http.post(PARSE.URL + 'classes/Vehicle', y, PARSE.CONFIG)
+
+        .success( function () {
+
+          // Route Home
+          $location.path('/');
+
+          $scope.car = {};
+
+        });
+
+
+      };
+
+    }
+  ])
 
 }());
